@@ -42,3 +42,16 @@ class TestInitBoard(unittest.TestCase):
              [[2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]],
              [[2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]],
             slv398.init_domain(board))
+
+    def test_impossible(self):
+        board_size = 4
+        board_data = [[0 for i in range(board_size)] for j in range(board_size)]
+        board_data[0][0] = 1
+        board_data[1][0] = 1
+        board = slv398.SudokuBoard(board_size, board_data)
+        self.assertEqual(
+            [[[], [2, 3, 4], [2, 3, 4], [2, 3, 4]],
+             [[1], [2, 3, 4], [2, 3, 4], [2, 3, 4]],
+             [[2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]],
+             [[2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]],
+            slv398.init_domain(board))
