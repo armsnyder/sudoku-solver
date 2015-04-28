@@ -107,8 +107,8 @@ def is_complete(sudoku_board):
                     if((BoardArray[SquareRow*subsquare+i][SquareCol*subsquare+j]
                             == BoardArray[row][col])
                         and (SquareRow*subsquare + i != row)
-                        and (SquareCol*subsqun array representing a are + j != col)):
-                        return False
+                        and (SquareCol*subsquare + j != col)):
+                            return False
     return True
 
 def init_board(file_name):
