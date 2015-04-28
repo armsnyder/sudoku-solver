@@ -3,7 +3,7 @@
 # Date: 1 May 2015
 #
 
-import struct, string, math
+import struct, string, math, sys
 
 class SudokuBoard:
     """This will be the sudoku board game object your player will manipulate."""
@@ -124,44 +124,61 @@ def solve(initial_board, forward_checking = False, MRV = False, MCV = False,
     print "Your code will solve the initial_board here!"
     print "Remember to return the final board (the SudokuBoard object)."
     print "I'm simply returning initial_board for demonstration purposes."
-    domain = init_domain(initial_board)
+    init_domain(initial_board, forward_checking)
     return initial_board
 
-def updateDomain(domain, row, col, value):
-    #domain[][][]
-    for a in range(len(domain)):
+
+def update_domain(board, row, col, value):
+    """
+    Performs forward-checking by updating the domain of each space in a board given the addition of a value to a
+    particular space.
+    """
+    for a in range(board.BoardSize):
         try:
-            domain[row][a].remove(value)
+            board.CurrentGameBoard[row][a].remove(value)
         except ValueError:
             pass
-
-    for a in range(len(domain)):
-        try:
-            domain[a][col].remove(value)
-        except ValueError:
+        except AttributeError:
             pass
 
-    squareWidth=int(math.sqrt(len(domain)))
+    for a in range(board.BoardSize):
+        try:
+            board.CurrentGameBoard[a][col].remove(value)
+        except ValueError:
+            pass
+        except AttributeError:
+            pass
 
-    for a in range(squareWidth*(row/squareWidth), squareWidth*(row/squareWidth)+squareWidth):
-        for b in range(squareWidth*(col/squareWidth), squareWidth*(col/squareWidth)+squareWidth):
+    square_width = int(math.sqrt(board.BoardSize))
+
+    for a in range(square_width*(row/square_width), square_width*(row/square_width)+square_width):
+        for b in range(square_width*(col/square_width), square_width*(col/square_width)+square_width):
             try:
-                domain[a][b].remove(value)
+                board.CurrentGameBoard[a][b].remove(value)
             except ValueError:
                 pass
-    domain[row][col]=[value]
+            except AttributeError:
+                pass
     return
 
 
-def init_domain(board):
-    domain = [[list(range(1, board.BoardSize+1)) for row in range(board.BoardSize)] for column in range(board.BoardSize)]
+def init_domain(board, forward_checking):
+    """
+    Takes an initial board and modifies its CurrentGameBoard field to work with our code by replacing unsolved spaces
+    with full domains, optionally performing forward checking
+    """
+    initial_game_board = board.CurrentGameBoard
+    board.CurrentGameBoard = [[list(range(1, board.BoardSize+1)) for row in range(board.BoardSize)]
+                              for column in range(board.BoardSize)]
 
-    for row in range(len(board.CurrentGameBoard)):
-        for column in range(len(board.CurrentGameBoard[row])):
-            if board.CurrentGameBoard[row][column]:
-                updateDomain(domain, row, column, board.CurrentGameBoard[row][column])
+    for row in range(board.BoardSize):
+        for column in range(board.BoardSize):
+            cell_value = initial_game_board[row][column]
+            if cell_value:
+                board.CurrentGameBoard[row][column] = cell_value
+                if isinstance(cell_value, int) and forward_checking:
+                    update_domain(board, row, column, cell_value)
 
-    return domain
 
 if __name__ == '__main__':
     solve(init_board('input_puzzles/easy/4_4.sudoku'))
