@@ -3,7 +3,7 @@
 # Date: 1 May 2015
 #
 
-import struct, string, math
+import struct, string, math, sys
 
 class SudokuBoard:
     """This will be the sudoku board game object your player will manipulate."""
@@ -124,4 +124,19 @@ def solve(initial_board, forward_checking = False, MRV = False, MCV = False,
     print "Your code will solve the initial_board here!"
     print "Remember to return the final board (the SudokuBoard object)."
     print "I'm simply returning initial_board for demonstration purposes."
+    domain = init_domain(initial_board)
     return initial_board
+
+
+def init_domain(board):
+    domain = [[list(range(1, board.BoardSize+1)) for row in range(board.BoardSize)] for column in range(board.BoardSize)]
+
+    for row in range(len(board.CurrentGameBoard)):
+        for column in range(len(board.CurrentGameBoard[row])):
+            if board.CurrentGameBoard[row][column]:
+                updateDomain(domain, row, column, board[row][column])
+
+    return domain
+
+if __name__ == '__main__':
+    solve(init_board('input_puzzles/easy/4_4.sudoku'))
