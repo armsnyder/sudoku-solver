@@ -125,3 +125,30 @@ def solve(initial_board, forward_checking = False, MRV = False, MCV = False,
     print "Remember to return the final board (the SudokuBoard object)."
     print "I'm simply returning initial_board for demonstration purposes."
     return initial_board
+
+def updateDomain(domain, row, col, value):
+    #domain[][][]
+    for a in range(len(domain)):
+        try:
+            domain[row][a].remove(value)
+        except ValueError:
+            pass
+
+    for a in range(len(domain)):
+        try:
+            domain[a][col].remove(value)
+        except ValueError:
+            pass
+
+    squareWidth=int(math.sqrt(len(domain)))
+
+    for a in range(squareWidth*(row/squareWidth), squareWidth*(row/squareWidth)+squareWidth):
+        for b in range(squareWidth*(col/squareWidth), squareWidth*(col/squareWidth)+squareWidth):
+            try:
+                domain[a][b].remove(value)
+            except ValueError:
+                pass
+    return
+
+
+
