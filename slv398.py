@@ -149,10 +149,8 @@ def updateDomain(domain, row, col, value):
                 domain[a][b].remove(value)
             except ValueError:
                 pass
+    domain[row][col]=[value]
     return
-
-
-
 
 
 def init_domain(board):
