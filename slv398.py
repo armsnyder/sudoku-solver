@@ -161,7 +161,7 @@ def init_domain(board):
     for row in range(len(board.CurrentGameBoard)):
         for column in range(len(board.CurrentGameBoard[row])):
             if board.CurrentGameBoard[row][column]:
-                updateDomain(domain, row, column, board[row][column])
+                updateDomain(domain, row, column, board.CurrentGameBoard[row][column])
 
     return domain
 
