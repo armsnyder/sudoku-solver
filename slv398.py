@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# Author(s) names AND netid's: Michael Nowakowski (mjn912), Adam Snyder (ars123) and Steven Vorbrich (slv398)
+# Date: 1 May 2015
+#
+
 import struct, string, math
 
 class SudokuBoard:
