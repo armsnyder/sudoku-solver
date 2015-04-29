@@ -5,6 +5,7 @@
 
 import struct, string, math
 
+
 class SudokuBoard:
     """This will be the sudoku board game object your player will manipulate."""
   
@@ -58,6 +59,7 @@ class SudokuBoard:
             else:
                 print sep
 
+
 def parse_file(filename):
     """Parses a sudoku text file into a BoardSize, and a 2d array which holds
     the value of each cell. Array elements holding a 0 are considered to be
@@ -80,7 +82,8 @@ def parse_file(filename):
         board[row-1][col-1]=val
     
     return board
-    
+
+
 def is_complete(sudoku_board):
     """Takes in a sudoku board and tests to see if it has been filled in
     correctly."""
@@ -111,10 +114,12 @@ def is_complete(sudoku_board):
                             return False
     return True
 
+
 def init_board(file_name):
     """Creates a SudokuBoard object initialized with values from a text file"""
     board = parse_file(file_name)
     return SudokuBoard(len(board), board)
+
 
 def solve(initial_board, forward_checking = False, MRV = False, MCV = False,
     LCV = False):
@@ -126,6 +131,7 @@ def solve(initial_board, forward_checking = False, MRV = False, MCV = False,
     print "I'm simply returning initial_board for demonstration purposes."
     domain = init_domain(initial_board)
     return initial_board
+
 
 def updateDomain(domain, row, col, value):
     #domain[][][]
@@ -141,7 +147,7 @@ def updateDomain(domain, row, col, value):
         except ValueError:
             pass
 
-    squareWidth=int(math.sqrt(len(domain)))
+    squareWidth = int(math.sqrt(len(domain)))
 
     for a in range(squareWidth*(row/squareWidth), squareWidth*(row/squareWidth)+squareWidth):
         for b in range(squareWidth*(col/squareWidth), squareWidth*(col/squareWidth)+squareWidth):

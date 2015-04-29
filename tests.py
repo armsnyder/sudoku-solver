@@ -26,3 +26,9 @@ class TestInitBoard(unittest.TestCase):
              [[2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]],
              [[2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]],
             slv398.init_domain(board))
+
+    def test_initDomain(self):
+
+        newboard = slv398.init_board("input_puzzles/easy/25_25.sudoku")
+        newboard.print_board()
+        print slv398.init_domain(newboard)
