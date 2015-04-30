@@ -92,3 +92,11 @@ class TestInitBoard(unittest.TestCase):
         slv398.init_domain(newboard, False)
         newboard.print_board()
         self.assertEqual(True, slv398.is_board_valid(newboard))
+
+    def test_FC_solve_9x9(self):
+        print "Hello"
+        newboard = slv398.init_board("input_puzzles/easy/16_16.sudoku")
+        slv398.init_domain(newboard, True)
+        newboard.print_board()
+        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard)))
+        pass

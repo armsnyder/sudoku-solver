@@ -203,6 +203,9 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
                     new_board = copy.deepcopy(board)
                     new_board.CurrentGameBoard[row][column] = option
                     assignments += 1
+                    if forward_checking:
+                        update_domain(new_board, row, column, option)
+
                     if is_board_valid(new_board):
                         new_new_board, ok = backtrack(new_board, forward_checking, mrv, mcv, lcv)
                         if ok:
