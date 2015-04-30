@@ -212,10 +212,8 @@ def is_board_valid(board):
                 continue
             for i in range(size):
                 if (BoardArray[row][i] == BoardArray[row][col]) and (i != col):
-                    print "unequal cols"
                     return False
                 if (BoardArray[i][col] == BoardArray[row][col]) and (i != row):
-                    print "unequal rows"
                     return False
             #determine which square the cell is in
             SquareRow = row // subsquare
