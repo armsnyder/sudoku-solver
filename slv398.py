@@ -109,8 +109,7 @@ def is_complete(sudoku_board):
                 for j in range(subsquare):
                     if((BoardArray[SquareRow*subsquare+i][SquareCol*subsquare+j]
                             == BoardArray[row][col])
-                        and (SquareRow*subsquare + i != row)
-                        and (SquareCol*subsquare + j != col)):
+                    and (SquareRow*subsquare + i != row) and (SquareCol*subsquare + j != col)):
                             return False
     return True
 
@@ -121,8 +120,7 @@ def init_board(file_name):
     return SudokuBoard(len(board), board)
 
 
-def solve(initial_board, forward_checking = False, MRV = False, MCV = False,
-    LCV = False):
+def solve(initial_board, forward_checking = False, MRV = False, MCV = False, LCV = False):
     """Takes an initial SudokuBoard and solves it using back tracking, and zero
     or more of the heuristics and constraint propagation methods (determined by
     arguments). Returns the resulting board solution. """
@@ -196,6 +194,33 @@ def is_board_valid(board):
     """
     Returns True if board is consistent; False if it is not
     """
+    BoardArray = board.CurrentGameBoard
+    size = board.BoardSize
+    subsquare = int(math.sqrt(size))
+
+    for row in range(size):
+        for col in range(size):
+            if not isinstance(BoardArray[row][col], int):
+                continue
+            for i in range(size):
+                if (BoardArray[row][i] == BoardArray[row][col]) and (i != col):
+                    print "unequal cols"
+                    return False
+                if (BoardArray[i][col] == BoardArray[row][col]) and (i != row):
+                    print "unequal rows"
+                    return False
+            #determine which square the cell is in
+            SquareRow = row // subsquare
+            SquareCol = col // subsquare
+            for i in range(subsquare):
+                for j in range(subsquare):
+                    if((BoardArray[SquareRow*subsquare+i][SquareCol*subsquare+j]
+                            == BoardArray[row][col])
+                    and (SquareRow*subsquare + i != row) and (SquareCol*subsquare + j != col)):
+                            return False
+
+    return True
+
     pass
 
 

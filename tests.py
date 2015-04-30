@@ -72,9 +72,10 @@ class TestInitBoard(unittest.TestCase):
              [[2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]],
              [[2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]],
             board.CurrentGameBoard)
-   
-        
-    def test_initDomain(self):
-        newboard = slv398.init_board("input_puzzles/easy/25_25.sudoku")
+
+
+    def test_board_valid(self):
+        newboard = slv398.init_board("input_puzzles/easy/4_4.sudoku")
+        slv398.init_domain(newboard, False)
         newboard.print_board()
-        print slv398.init_domain(newboard, False)
+        self.assertEqual(True, slv398.is_board_valid(newboard))
