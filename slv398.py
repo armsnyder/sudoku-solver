@@ -185,5 +185,19 @@ def init_domain(board, forward_checking):
                     update_domain(board, row, column, cell_value)
 
 
+def backtrack(board, forward_checking=False,  mrv=False, mcv=False, lcv=False):
+    """
+    Recursive depth-first-search algorithm
+    """
+    pass
+
+
+def is_board_valid(board):
+    """
+    Returns True if board is consistent; False if it is not
+    """
+    pass
+
+
 if __name__ == '__main__':
     solve(init_board('input_puzzles/easy/4_4.sudoku'))
