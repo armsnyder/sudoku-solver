@@ -73,6 +73,12 @@ class TestInitBoard(unittest.TestCase):
              [[2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]],
             board.CurrentGameBoard)
 
+    def test_solve_4x4(self):
+        newboard = slv398.init_board("input_puzzles/easy/4_4.sudoku")
+        slv398.init_domain(newboard, False)
+        newboard.print_board()
+        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard)))
+        pass
 
     def test_board_valid(self):
         newboard = slv398.init_board("input_puzzles/easy/4_4.sudoku")

@@ -188,7 +188,7 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
     """
     for row in range(board.BoardSize):
         for column in range(board.BoardSize):
-            cell_value = board[row][column]
+            cell_value = board.CurrentGameBoard[row][column]
             if isinstance(cell_value, list):
                 for option in cell_value:
                     new_board = copy.deepcopy(board)
