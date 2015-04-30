@@ -76,27 +76,50 @@ class TestInitBoard(unittest.TestCase):
     def test_solve_4x4(self):
         newboard = slv398.init_board("input_puzzles/easy/4_4.sudoku")
         slv398.init_domain(newboard, False)
-        newboard.print_board()
         self.assertEqual(True, slv398.is_complete(slv398.solve(newboard)))
-        pass
 
     def test_solve_9x9(self):
         newboard = slv398.init_board("input_puzzles/easy/9_9.sudoku")
         slv398.init_domain(newboard, False)
-        newboard.print_board()
         self.assertEqual(True, slv398.is_complete(slv398.solve(newboard)))
-        pass
 
     def test_board_valid(self):
         newboard = slv398.init_board("input_puzzles/easy/4_4.sudoku")
         slv398.init_domain(newboard, False)
-        newboard.print_board()
         self.assertEqual(True, slv398.is_board_valid(newboard))
 
+    def test_FC_solve_4x4(self):
+        print "test_FC_solve_4x4"
+        newboard = slv398.init_board("input_puzzles/easy/4_4.sudoku")
+        slv398.init_domain(newboard, True)
+        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True)))
+
     def test_FC_solve_9x9(self):
-        print "Hello"
+        print "test_FC_solve_9x9"
+        newboard = slv398.init_board("input_puzzles/easy/9_9.sudoku")
+        slv398.init_domain(newboard, True)
+        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True)))
+
+    def test_FC_solve_16x16(self):
+        print "test_FC_solve_16x16"
         newboard = slv398.init_board("input_puzzles/easy/16_16.sudoku")
         slv398.init_domain(newboard, True)
-        newboard.print_board()
-        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard)))
-        pass
+        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True)))
+
+    def test_MRV_solve_9x9(self):
+        print "test_MRV_solve_9x9"
+        newboard = slv398.init_board("input_puzzles/easy/9_9.sudoku")
+        slv398.init_domain(newboard, True)
+        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True, True)))
+
+    def test_MRV_solve_4x4(self):
+        print "test_MRV_solve_4x4"
+        newboard = slv398.init_board("input_puzzles/easy/4_4.sudoku")
+        slv398.init_domain(newboard, True)
+        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True, True)))
+
+    def test_MRV_solve_16x16(self):
+        print "test_MRV_solve_16x16"
+        newboard = slv398.init_board("input_puzzles/easy/16_16.sudoku")
+        slv398.init_domain(newboard, True)
+        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True, True)))

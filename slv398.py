@@ -123,9 +123,6 @@ def solve(initial_board, forward_checking=False, mrv=False, mcv=False, lcv=False
     """Takes an initial SudokuBoard and solves it using back tracking, and zero
     or more of the heuristics and constraint propagation methods (determined by
     arguments). Returns the resulting board solution. """
-    print "Your code will solve the initial_board here!"
-    print "Remember to return the final board (the SudokuBoard object)."
-    print "I'm simply returning initial_board for demonstration purposes."
     global assignments
     assignments = 0
     init_domain(initial_board, forward_checking)
@@ -194,28 +191,37 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
     Recursive depth-first-search algorithm
     """
     global assignments
-    for row in range(board.BoardSize):
-        for column in range(board.BoardSize):
-            cell_value = board.CurrentGameBoard[row][column]
-            if isinstance(cell_value, list):
-                found_option = False
-                for option in cell_value:
-                    new_board = copy.deepcopy(board)
-                    new_board.CurrentGameBoard[row][column] = option
-                    assignments += 1
-                    if forward_checking:
-                        update_domain(new_board, row, column, option)
+    cells = [(board.CurrentGameBoard[row][column], row, column) for row, column in
+             [(x, y) for x in range(board.BoardSize) for y in range(board.BoardSize)]
+             if isinstance(board.CurrentGameBoard[row][column], list)]
+    if mrv:
+        cells = sorted(cells, key=lambda item: len(item[0]))
+        pass
+    elif mcv:
+        # TODO: Sort!
+        pass
 
-                    if is_board_valid(new_board):
-                        new_new_board, ok = backtrack(new_board, forward_checking, mrv, mcv, lcv)
-                        if ok:
-                            board = new_new_board
-                        else:
-                            continue
-                        found_option = True
-                        break
-                if not found_option:
-                    return board, False
+    for cell_value, row, column in cells:
+        if isinstance(cell_value, list):
+            found_option = False
+            for option in cell_value:
+                new_board = copy.deepcopy(board)
+                new_board.CurrentGameBoard[row][column] = option
+                assignments += 1
+                if forward_checking:
+                    update_domain(new_board, row, column, option)
+
+                if is_board_valid(new_board):
+                    new_new_board, ok = backtrack(new_board, forward_checking, mrv, mcv, lcv)
+                    if ok:
+                        board = new_new_board
+                    else:
+                        continue
+                    found_option = True
+                    break
+            if not found_option:
+                return board, False
+            break
     return board, True
 
 
