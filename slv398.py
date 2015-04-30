@@ -127,7 +127,7 @@ def solve(initial_board, forward_checking=False, mrv=False, mcv=False, lcv=False
     print "Remember to return the final board (the SudokuBoard object)."
     print "I'm simply returning initial_board for demonstration purposes."
     init_domain(initial_board, forward_checking)
-    return backtrack(initial_board, forward_checking, mrv, mcv, lcv)
+    return backtrack(initial_board, forward_checking, mrv, mcv, lcv)[0]
 
 
 def update_domain(board, row, col, value):
@@ -190,12 +190,21 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
         for column in range(board.BoardSize):
             cell_value = board.CurrentGameBoard[row][column]
             if isinstance(cell_value, list):
+                found_option = False
                 for option in cell_value:
                     new_board = copy.deepcopy(board)
                     new_board.CurrentGameBoard[row][column] = option
                     if is_board_valid(new_board):
-                        board = backtrack(new_board, forward_checking, mrv, mcv, lcv)
-    return board
+                        new_new_board, ok = backtrack(new_board, forward_checking, mrv, mcv, lcv)
+                        if ok:
+                            board = new_new_board
+                        else:
+                            continue
+                        found_option = True
+                        break
+                if not found_option:
+                    return board, False
+    return board, True
 
 
 def is_board_valid(board):

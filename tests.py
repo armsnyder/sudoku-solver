@@ -80,15 +80,15 @@ class TestInitBoard(unittest.TestCase):
         self.assertEqual(True, slv398.is_complete(slv398.solve(newboard)))
         pass
 
+    def test_solve_9x9(self):
+        newboard = slv398.init_board("input_puzzles/easy/9_9.sudoku")
+        slv398.init_domain(newboard, False)
+        newboard.print_board()
+        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard)))
+        pass
+
     def test_board_valid(self):
         newboard = slv398.init_board("input_puzzles/easy/4_4.sudoku")
         slv398.init_domain(newboard, False)
         newboard.print_board()
         self.assertEqual(True, slv398.is_board_valid(newboard))
-
-    def test_backtrack(self):
-        anotherboard = slv398.init_board("input_puzzles/easy/4_4.sudoku")
-        slv398.init_domain(anotherboard, False)
-        anotherboard.print_board()
-        result = slv398.backtrack(anotherboard)
-        result.print_board()
