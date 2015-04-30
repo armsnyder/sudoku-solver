@@ -3,27 +3,27 @@
 # Date: 1 May 2015
 #
 
-import struct, string, math, sys
+import math
+import copy
 
 
 class SudokuBoard:
     """This will be the sudoku board game object your player will manipulate."""
   
     def __init__(self, size, board):
-      """the constructor for the SudokuBoard"""
-      self.BoardSize = size #the size of the board
-      self.CurrentGameBoard= board #the current state of the game board
+        """the constructor for the SudokuBoard"""
+        self.BoardSize = size  # the size of the board
+        self.CurrentGameBoard = board  # the current state of the game board
 
     def set_value(self, row, col, value):
         """This function will create a new sudoku board object with the input
         value placed on the GameBoard row and col are both zero-indexed"""
 
-        #add the value to the appropriate position on the board
-        self.CurrentGameBoard[row][col]=value
-        #return a new board of the same size with the value added
+        # add the value to the appropriate position on the board
+        self.CurrentGameBoard[row][col] = value
+        # return a new board of the same size with the value added
         return SudokuBoard(self.BoardSize, self.CurrentGameBoard)
-                                                                  
-                                                                  
+
     def print_board(self):
         """Prints the current game board. Leaves unassigned spots blank."""
         div = int(math.sqrt(self.BoardSize))
@@ -47,39 +47,39 @@ class SudokuBoard:
                         print "", self.CurrentGameBoard[i][j],
                     else:
                         print "  ",
-                    if (j+1 != self.BoardSize):
-                        if ((j+1)//div != j/div):
+                    if j+1 != self.BoardSize:
+                        if (j+1)//div != j/div:
                             print "|",
                         else:
                             print "",
                     else:
                         print "|"
-            if ((i+1)//div != i/div):
+            if (i+1)//div != i/div:
                 print line
             else:
                 print sep
 
 
 def parse_file(filename):
-    """Parses a sudoku text file into a BoardSize, and a 2d array which holds
+    """Parses a sudoku text file into a boardsize, and a 2d array which holds
     the value of each cell. Array elements holding a 0 are considered to be
     empty."""
 
     f = open(filename, 'r')
-    BoardSize = int( f.readline())
-    NumVals = int(f.readline())
+    boardsize = int(f.readline())
+    numvals = int(f.readline())
 
-    #initialize a blank board
-    board= [ [ 0 for i in range(BoardSize) ] for j in range(BoardSize) ]
+    # initialize a blank board
+    board = [[0 for i in range(boardsize)] for j in range(boardsize)]
 
-    #populate the board with initial values
-    for i in range(NumVals):
+    # populate the board with initial values
+    for i in range(numvals):
         line = f.readline()
         chars = line.split()
         row = int(chars[0])
         col = int(chars[1])
         val = int(chars[2])
-        board[row-1][col-1]=val
+        board[row-1][col-1] = val
     
     return board
 
@@ -87,30 +87,29 @@ def parse_file(filename):
 def is_complete(sudoku_board):
     """Takes in a sudoku board and tests to see if it has been filled in
     correctly."""
-    BoardArray = sudoku_board.CurrentGameBoard
-    size = len(BoardArray)
+    boardarray = sudoku_board.CurrentGameBoard
+    size = len(boardarray)
     subsquare = int(math.sqrt(size))
 
-    #check each cell on the board for a 0, or if the value of the cell
-    #is present elsewhere within the same row, column, or square
+    # check each cell on the board for a 0, or if the value of the cell
+    # is present elsewhere within the same row, column, or square
     for row in range(size):
         for col in range(size):
-            if BoardArray[row][col]==0:
+            if boardarray[row][col] == 0:
                 return False
             for i in range(size):
-                if ((BoardArray[row][i] == BoardArray[row][col]) and i != col):
+                if (boardarray[row][i] == boardarray[row][col]) and i != col:
                     return False
-                if ((BoardArray[i][col] == BoardArray[row][col]) and i != row):
+                if (boardarray[i][col] == boardarray[row][col]) and i != row:
                     return False
-            #determine which square the cell is in
-            SquareRow = row // subsquare
-            SquareCol = col // subsquare
+            # determine which square the cell is in
+            square_row = row // subsquare
+            square_col = col // subsquare
             for i in range(subsquare):
                 for j in range(subsquare):
-                    if((BoardArray[SquareRow*subsquare+i][SquareCol*subsquare+j]
-                            == BoardArray[row][col])
-                    and (SquareRow*subsquare + i != row) and (SquareCol*subsquare + j != col)):
-                            return False
+                    if (boardarray[square_row*subsquare+i][square_col*subsquare+j] == boardarray[row][col]) \
+                            and (square_row*subsquare + i != row) and (square_col*subsquare + j != col):
+                        return False
     return True
 
 
@@ -120,7 +119,7 @@ def init_board(file_name):
     return SudokuBoard(len(board), board)
 
 
-def solve(initial_board, forward_checking = False, MRV = False, MCV = False, LCV = False):
+def solve(initial_board, forward_checking=False, mrv=False, mcv=False, lcv=False):
     """Takes an initial SudokuBoard and solves it using back tracking, and zero
     or more of the heuristics and constraint propagation methods (determined by
     arguments). Returns the resulting board solution. """
@@ -128,7 +127,7 @@ def solve(initial_board, forward_checking = False, MRV = False, MCV = False, LCV
     print "Remember to return the final board (the SudokuBoard object)."
     print "I'm simply returning initial_board for demonstration purposes."
     init_domain(initial_board, forward_checking)
-    return initial_board
+    return backtrack(initial_board, forward_checking, mrv, mcv, lcv)
 
 
 def update_domain(board, row, col, value):
@@ -183,11 +182,20 @@ def init_domain(board, forward_checking):
                     update_domain(board, row, column, cell_value)
 
 
-def backtrack(board, forward_checking=False,  mrv=False, mcv=False, lcv=False):
+def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
     """
     Recursive depth-first-search algorithm
     """
-    pass
+    for row in range(board.BoardSize):
+        for column in range(board.BoardSize):
+            cell_value = board[row][column]
+            if isinstance(cell_value, list):
+                for option in cell_value:
+                    new_board = copy.deepcopy(board)
+                    new_board.CurrentGameBoard[row][column] = option
+                    if is_board_valid(new_board):
+                        board = backtrack(new_board, forward_checking, mrv, mcv, lcv)
+    return board
 
 
 def is_board_valid(board):
