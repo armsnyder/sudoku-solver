@@ -127,7 +127,7 @@ def solve(initial_board, forward_checking=False, mrv=False, mcv=False, lcv=False
     print "Remember to return the final board (the SudokuBoard object)."
     print "I'm simply returning initial_board for demonstration purposes."
     init_domain(initial_board, forward_checking)
-    return initial_board
+    return backtrack(initial_board, forward_checking, mrv, mcv, lcv)
 
 
 def update_domain(board, row, col, value):
