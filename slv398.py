@@ -3,7 +3,8 @@
 # Date: 1 May 2015
 #
 
-import struct, string, math, sys
+import math
+import copy
 
 
 class SudokuBoard:
@@ -185,11 +186,20 @@ def init_domain(board, forward_checking):
                     update_domain(board, row, column, cell_value)
 
 
-def backtrack(board, forward_checking=False,  mrv=False, mcv=False, lcv=False):
+def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
     """
     Recursive depth-first-search algorithm
     """
-    pass
+    for row in range(board.BoardSize):
+        for column in range(board.BoardSize):
+            cell_value = board[row][column]
+            if isinstance(cell_value, list):
+                for option in cell_value:
+                    new_board = copy.deepcopy(board)
+                    new_board.CurrentGameBoard[row][column] = option
+                    if is_board_valid(new_board):
+                        board = backtrack(new_board, forward_checking, mrv, mcv, lcv)
+    return board
 
 
 def is_board_valid(board):
