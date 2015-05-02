@@ -115,9 +115,25 @@ class TestInitBoard(unittest.TestCase):
 
 class TestConstraints(unittest.TestCase):
 
-    def test_constraints(self):
+    def test_basic_4(self):
         board_size = 4
         board_data = [[0 for i in range(board_size)] for j in range(board_size)]
         board = slv398.SudokuBoard(board_size, board_data)
         slv398.init_domain(board, True)
         self.assertEqual(8, slv398.count_constraints(board, 0, 0))
+
+    def test_basic_9(self):
+        board_size = 9
+        board_data = [[0 for i in range(board_size)] for j in range(board_size)]
+        board = slv398.SudokuBoard(board_size, board_data)
+        slv398.init_domain(board, True)
+        self.assertEqual(21, slv398.count_constraints(board, 0, 0))
+
+    def test_more_4(self):
+        board_size = 4
+        board_data = [[0 for i in range(board_size)] for j in range(board_size)]
+        board_data[0][1] = 1
+        board = slv398.SudokuBoard(board_size, board_data)
+        slv398.init_domain(board, True)
+        board.print_board()
+        self.assertEqual(7, slv398.count_constraints(board, 0, 0))

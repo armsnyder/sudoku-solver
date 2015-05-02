@@ -255,7 +255,9 @@ def count_constraints(board, row, column):
     square_width = int(math.sqrt(board.BoardSize))
     for a in range(square_width*(row/square_width), square_width*(row/square_width)+square_width):
         for b in range(square_width*(column/square_width), square_width*(column/square_width)+square_width):
-            affected_cells.append((a, b))
+            cell = board.CurrentGameBoard[a][b]
+            if isinstance(cell, list):
+                affected_cells.append((a, b))
 
     return len(set(affected_cells))
 
