@@ -194,34 +194,42 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
     cells = [(board.CurrentGameBoard[row][column], row, column) for row, column in
              [(x, y) for x in range(board.BoardSize) for y in range(board.BoardSize)]
              if isinstance(board.CurrentGameBoard[row][column], list)]
+
+    if len(cells) == 0:
+        return board, True
+    cell_to_choose = cells[0]
     if mrv:
-        cells = sorted(cells, key=lambda item: len(item[0]))
+        cell_to_choose = sorted(cells, key=lambda item: len(item[0]))[0]
+
         pass
     elif mcv:
         # TODO: Sort!
         pass
+    
+    #with cell_to_choose[0] as cell_value, cell_to_choose[1] as row, cell_to_choose[2] as column:
+    cell_value = cell_to_choose[0]
+    row = cell_to_choose[1]
+    column = cell_to_choose[2]
+    if isinstance(cell_value, list):
+        found_option = False
+        for option in cell_value:
+            new_board = copy.deepcopy(board)
+            new_board.CurrentGameBoard[row][column] = option
+            assignments += 1
+            if forward_checking:
+                update_domain(new_board, row, column, option)
 
-    for cell_value, row, column in cells:
-        if isinstance(cell_value, list):
-            found_option = False
-            for option in cell_value:
-                new_board = copy.deepcopy(board)
-                new_board.CurrentGameBoard[row][column] = option
-                assignments += 1
-                if forward_checking:
-                    update_domain(new_board, row, column, option)
-
-                if is_board_valid(new_board):
-                    new_new_board, ok = backtrack(new_board, forward_checking, mrv, mcv, lcv)
-                    if ok:
-                        board = new_new_board
-                    else:
-                        continue
-                    found_option = True
-                    break
-            if not found_option:
-                return board, False
-            break
+            if is_board_valid(new_board):
+                new_new_board, ok = backtrack(new_board, forward_checking, mrv, mcv, lcv)
+                if ok:
+                    board = new_new_board
+                else:
+                    continue
+                found_option = True
+                break
+        if not found_option:
+            return board, False
+            #break
     return board, True
 
 
