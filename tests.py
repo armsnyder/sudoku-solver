@@ -100,12 +100,6 @@ class TestInitBoard(unittest.TestCase):
         slv398.init_domain(newboard, True)
         self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True)))
 
-    def test_FC_solve_16x16(self):
-        print "test_FC_solve_16x16"
-        newboard = slv398.init_board("input_puzzles/easy/16_16.sudoku")
-        slv398.init_domain(newboard, True)
-        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True)))
-
     def test_MRV_solve_9x9(self):
         print "test_MRV_solve_9x9"
         newboard = slv398.init_board("input_puzzles/easy/9_9.sudoku")
@@ -118,8 +112,12 @@ class TestInitBoard(unittest.TestCase):
         slv398.init_domain(newboard, True)
         self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True, True)))
 
-    def test_MRV_solve_16x16(self):
-        print "test_MRV_solve_16x16"
-        newboard = slv398.init_board("input_puzzles/easy/16_16.sudoku")
-        slv398.init_domain(newboard, True)
-        self.assertEqual(True, slv398.is_complete(slv398.solve(newboard, True, True)))
+
+class TestConstraints(unittest.TestCase):
+
+    def test_constraints(self):
+        board_size = 4
+        board_data = [[0 for i in range(board_size)] for j in range(board_size)]
+        board = slv398.SudokuBoard(board_size, board_data)
+        slv398.init_domain(board, True)
+        self.assertEqual(8, slv398.count_constraints(board, 0, 0))
