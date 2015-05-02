@@ -225,6 +225,33 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
     return board, True
 
 
+def count_constraints(board, row, column):
+    """
+    Counts the number of contraining values given a cell, used for sorting
+    """
+    affected_cells = []
+
+    # Count columns
+    for column_i in range(board.BoardSize):
+        cell = board.CurrentGameBoard[row][column_i]
+        if isinstance(cell, list):
+            affected_cells.append((row, column_i))
+
+    # Count rows
+    for row_i in range(board.BoardSize):
+        cell = board.CurrentGameBoard[row_i][column]
+        if isinstance(cell, list):
+            affected_cells.append((row_i, column))
+
+    # Count squares
+    square_width = int(math.sqrt(board.BoardSize))
+    for a in range(square_width*(row/square_width), square_width*(row/square_width)+square_width):
+        for b in range(square_width*(column/square_width), square_width*(column/square_width)+square_width):
+            affected_cells.append((a, b))
+
+    return len(set(affected_cells))
+
+
 def is_board_valid(board):
     """
     Returns True if board is consistent; False if it is not
