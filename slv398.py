@@ -204,10 +204,13 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
         cell_to_choose = sorted(cells, key=lambda item: -count_constraints(board, item[1], item[2]))[0]
     print cell_to_choose
     
-    #with cell_to_choose[0] as cell_value, cell_to_choose[1] as row, cell_to_choose[2] as column:
     cell_value = cell_to_choose[0]
     row = cell_to_choose[1]
     column = cell_to_choose[2]
+
+    if lcv:
+        cell_value = sorted(cell_value, key=lambda item: count_occurrences(board, row, column, item))
+
     found_option = False
     for option in cell_value:
         new_board = copy.deepcopy(board)
@@ -257,6 +260,36 @@ def count_constraints(board, row, column):
                 affected_cells.append((a, b))
 
     return len(set(affected_cells))
+
+
+def count_occurrences(board, row, column, value):
+    """
+    Counts the number of contraining values given a cell, used for sorting
+    """
+    affected_cells = []
+
+    # Count columns
+    for column_i in range(board.BoardSize):
+        cell = board.CurrentGameBoard[row][column_i]
+        if isinstance(cell, list):
+            affected_cells.append((row, column_i))
+
+    # Count rows
+    for row_i in range(board.BoardSize):
+        cell = board.CurrentGameBoard[row_i][column]
+        if isinstance(cell, list):
+            affected_cells.append((row_i, column))
+
+    # Count squares
+    square_width = int(math.sqrt(board.BoardSize))
+    for a in range(square_width*(row/square_width), square_width*(row/square_width)+square_width):
+        for b in range(square_width*(column/square_width), square_width*(column/square_width)+square_width):
+            cell = board.CurrentGameBoard[a][b]
+            if isinstance(cell, list):
+                affected_cells.append((a, b))
+
+    return sum([1 for cell in set(affected_cells) if value in cell])
+    #return len(set(affected_cells))
 
 
 def is_board_valid(board):
