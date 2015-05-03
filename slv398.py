@@ -202,32 +202,32 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
         cell_to_choose = sorted(cells, key=lambda item: len(item[0]))[0]
     elif mcv:
         cell_to_choose = sorted(cells, key=lambda item: -count_constraints(board, item[1], item[2]))[0]
+    print cell_to_choose
     
     #with cell_to_choose[0] as cell_value, cell_to_choose[1] as row, cell_to_choose[2] as column:
     cell_value = cell_to_choose[0]
     row = cell_to_choose[1]
     column = cell_to_choose[2]
-    if isinstance(cell_value, list):
-        found_option = False
-        for option in cell_value:
-            new_board = copy.deepcopy(board)
-            new_board.CurrentGameBoard[row][column] = option
-            assignments += 1
-            if forward_checking:
-                update_domain(new_board, row, column, option)
+    found_option = False
+    for option in cell_value:
+        new_board = copy.deepcopy(board)
+        new_board.CurrentGameBoard[row][column] = option
+        assignments += 1
+        if forward_checking:
+            update_domain(new_board, row, column, option)
 
-            if is_board_valid(new_board):
-                new_new_board, ok = backtrack(new_board, forward_checking, mrv, mcv, lcv)
-                if ok:
-                    board = new_new_board
-                else:
-                    continue
-                found_option = True
-                break
-        if not found_option:
-            return board, False
-            #break
-    return board, True
+        if is_board_valid(new_board):
+            new_new_board, ok = backtrack(new_board, forward_checking, mrv, mcv, lcv)
+            if ok:
+                board = new_new_board
+            else:
+                continue
+            found_option = True
+            break
+    if found_option:
+        return board, True
+    else:
+        return board, False
 
 
 def count_constraints(board, row, column):
