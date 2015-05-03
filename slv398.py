@@ -219,7 +219,7 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
         if forward_checking:
             update_domain(new_board, row, column, option)
 
-        if is_board_valid(new_board):
+        if forward_checking or is_board_valid(new_board):
             new_new_board, ok = backtrack(new_board, forward_checking, mrv, mcv, lcv)
             if ok:
                 board = new_new_board
