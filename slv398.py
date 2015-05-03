@@ -202,7 +202,7 @@ def backtrack(board, forward_checking=False, mrv=False, mcv=False, lcv=False):
         cell_to_choose = sorted(cells, key=lambda item: len(item[0]))[0]
     elif mcv:
         cell_to_choose = sorted(cells, key=lambda item: -count_constraints(board, item[1], item[2]))[0]
-    print cell_to_choose
+    # print cell_to_choose
     
     cell_value = cell_to_choose[0]
     row = cell_to_choose[1]
